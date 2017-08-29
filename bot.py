@@ -12,12 +12,6 @@ async def on_ready():
     print('------')
 
 @client.event
-async def on_member_join(member):
-    new_member_role = await get_member_role(member.server)
-    await client.add_roles(member, new_member_role);
-    print('')
-
-@client.event
 async def get_member_role(serv):
     member_role = discord.utils.get(serv.roles, name="cwru")
     return(member_role)
@@ -29,7 +23,7 @@ async def on_message(message):
         return None
     elif message.channel.name == "introductions":
         if name_formatted(message.author.nick):
-            await client.send_message(message.channel, "Welcome {}, give me a second to flip some bits and you should be able to use our channels.")
+            await client.send_message(message.channel, "Welcome {}, give me a second to flip some bits and you should be able to use our channels.".format(message.author.name))
             role = await get_member_role(message.server)
             await client.add_roles(message.author, role)
         else:

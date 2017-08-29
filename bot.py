@@ -29,10 +29,11 @@ async def on_message(message):
         return None
     elif message.channel.name == "introductions":
         if name_formatted(message.author.nick):
+            await client.send_message(message.channel, "Welcome {}, give me a second to flip some bits and you should be able to use our channels.")
             role = await get_member_role(message.server)
             await client.add_roles(message.author, role)
         else:
-            await client.send_message(message.channel, "Hi {}, please edit your nickname to our server's standard [real name]([in-game name])".format(message.author.name))
+            await client.send_message(message.channel, "Hi {}, please edit your nickname to our server's standard [real name]([in-game name]) and post your introduction again.".format(message.author.name))
 
 def name_formatted(name):
     print(name)

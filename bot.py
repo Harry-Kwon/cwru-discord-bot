@@ -1,8 +1,10 @@
 import discord
 import asyncio
 import re
+import random
 
 client = discord.Client()
+accepted_messages = ["Welcome {}, giveme a second to flip some bits and you should be able to use our channels.")]
 
 @client.event
 async def on_ready():
@@ -19,15 +21,34 @@ async def get_member_role(serv):
 @client.event
 async def on_message(message):
     if message.author.name.endswith("bot"):
-        print("me")
         return None
     elif message.channel.name == "introductions":
-        if name_formatted(message.author.nick):
-            await client.send_message(message.channel, "Welcome {}, give me a second to flip some bits and you should be able to use our channels.".format(message.author.name))
+        if get_member_role(message.server) in message.author.roles:
+            return None
+        elif name_formatted(message.author.nick):
+            await client.send_message(message.channel, get_accepted_message.format(message.author.name))
             role = await get_member_role(message.server)
             await client.add_roles(message.author, role)
         else:
             await client.send_message(message.channel, "Hi {}, please edit your nickname to our server's standard [real name]([in-game name]) and post your introduction again.".format(message.author.name))
+    elif message.channel.name == "exec":
+        if message.content.startswith("!text"):
+            await client.send_message(message.channel, "test echo")
+        elif message.content.startswith("!list_welcome"):
+            await client.send_message(message.channel, "here are my current welcome messages:")
+            for x in accepted_messages:
+                await client.send_message(message.channel, x)
+        elif message.content.startswith("!add_welcome"):
+            if "{}" in message.content:
+                add_accepted_message(message.content[len("!add_welcome"):])
+            elif:
+                await client.send_message(message.channel, "welcome messages must have \"{}\" in place for the user's name")
+
+def get_accepted_message():
+    return(random.choice(accepted_messages))
+
+def add_accepted_message(msg):
+    accepted_messages.append(msg)
 
 def name_formatted(name):
     print(name)
